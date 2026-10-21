@@ -116,14 +116,17 @@ public readonly record struct NumberRange(double Min, double Max)
 IEnumerable<Reading> ReadingsOutsideRange(Station station, NumberRange range) =>
     station.Readings.Where(r => !range.Contains(r.Temp)); 
 
+------------------
 Similarities:
   The clump and the fix are the same as in the other two languages: group the values, then move the logic into the new type.
   The main benefit is still the behavior that moves into NumberRange, not just the shorter parameter list.
 
+------------------
 Differences: 
   Static typing makes repeated double min, double max signatures easier to spot. The compiler still won’t catch me swapping them, though, because     both are double.
   A record struct creates the whole value type in one line and includes the value-based equality Fowler recommends adding.
   C# offers tuples like (double min, double max) as a shortcut. Like the other languages’ shortcuts, it doesn’t give the group a real type to hold    behavior.
+
 ------------------
 Python comparison: 
 
@@ -146,10 +149,12 @@ class NumberRange:
 def readings_outside_range(station, rng: NumberRange):
     return [r for r in station["readings"] if not rng.contains(r["temp"])]
 
+------------------
 Similarities:
   Like JavaScript, Python is dynamically typed, so the clump is just as easy to overlook.
   The refactoring follows the same steps: create the type, pass it in, move contains into it.
 
+------------------
 Differences: 
   @dataclass(frozen=True) creates an immutable value object in a few lines, with no hand-written constructor or getters.
   Python’s shortcuts are keyword arguments (low=0, high=10) or a tuple. Like the JavaScript shortcut, they make calls clearer but don’t give the      group a home for behavior.
