@@ -1,22 +1,42 @@
 # CMPM121-S04-CodeSmells
 Group members: Roman Hage, Jack Farris
 Code Smells: Duplicated Code, Data Clumps 
+------------------------------------------
+Primitive Obsession.  
+------------------
 
+Primitive Obsession is a code smell where data that has a higher level of complexity is relegated to a primitive typing instead of its own dedicated class. A few examples of this are phone numbers being represented as a string or mass being represented as an integer. Phone numbers are not just strings of numbers; they have hyphens, area codes, and a specific length that they must be to qualify. When it comes to mass, it is very easy to misinterpret the units which can lead to miscalculations. In both of these cases, a specific class can guarantee type safety and clarity for the developer. This concept makes it easier to safely pass parameters and have a better understanding of the code itself. Using Fowlers methods, we can simply use "Replace Primitive with Object".
 
+For example:
+```
+string phoneNumber;
+```
+It is clear that there is nothing stopping us from passing any kind of string to phoneNumber
 
+We can instead create a class:  
+```
+// Java
+public class PhoneNumber {
 
+    private String phoneNumber;
 
+    public PhoneNumber(String number) {
+        if (number == null || number.length() != 12 || number.charAt(3) != '-' || number.charAt(7) != '-') {
+            throw new IllegalArgumentException("Phone number must be in XXX-XXX-XXXX format.");
+        }
+        phoneNumber = number;
+    }
 
-
-
-
-
-
-
-
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+}
+```
+In doing so, we can be sure that any argument we pass for a parameter of type PhoneNumber is a valid phone number
 
 ------------------
 Data Clumps:
+------------------
 Introduction:
 A data clump is a group of three or four values that keep showing up together, as fields in several classes or as parameters in many function signatures, without ever being given a type of their own. Fowler puts it this way in Chapter 3 (p. 78): “Data items tend to be like children: They enjoy hanging around together.” A group that always travels together “really ought to find a home together.”
 
