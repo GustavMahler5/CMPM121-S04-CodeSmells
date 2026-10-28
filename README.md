@@ -42,19 +42,19 @@ A data clump is a group of three or four values that keep showing up together, a
 
 ------------------
 How data clumps arise: 
-  Gradual growth
-  copy-paste reuse
-  thinking in primitives 
-  boundary data
-  prototyping
+  - Gradual growth
+  - copy-paste reuse
+  - thinking in primitives 
+  - boundary data
+  - prototyping
 
 ------------------
 Why data clumps are a problem:
-  Long parameters lists
-  Duplicated logics
-  Shotgun surgery 
-  Inconsistent naming 
-  A missing abstraction
+  - Long parameters lists
+  - Duplicated logics
+  - Shotgun surgery 
+  - Inconsistent naming 
+  - A missing abstraction
 
 ------------------
 Preventing Data clumps:
@@ -89,10 +89,10 @@ alerts = readingsOutsideRange(station,
 
 ------------------
 Why it smells/Whats wrong with it?:
-  min and max are clumped. Neither means anything alone, and they're always passed as a pair. If you deleted one, the other would make no sense, so they fail Fowler's deletion test in Ch 3. 
-  The pair gets split apart to travel. The caller pulls the two values out of operatingPlan and passes them separately. 
-  The names don't match. The plan calls them temperatureFloor and temperatureCeiling, but the function calls them min and max. 
-  The logic gets duped. Any other function that needs a range has to rewrite the < min || > max check.  
+  - min and max are clumped. Neither means anything alone, and they're always passed as a pair. If you deleted one, the other would make no sense, so they fail Fowler's deletion test in Ch 3. 
+  - The pair gets split apart to travel. The caller pulls the two values out of operatingPlan and passes them separately. 
+  - The names don't match. The plan calls them temperatureFloor and temperatureCeiling, but the function calls them min and max. 
+  - The logic gets duped. Any other function that needs a range has to rewrite the < min || > max check.  
 
 ------------------
 Refactoring/What to improve 
