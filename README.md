@@ -1,15 +1,16 @@
 # CMPM121-S04-CodeSmells
+
 Group members: Roman Hage, Jack Farris
-Code Smells: Duplicated Code, Data Clumps 
-------------------------------------------
-Primitive Obsession.  
-------------------
+
+# Code Smells: Duplicated Code, Data Clumps 
+
+## Primitive Obsession.  
 
 Primitive Obsession is a code smell where data that has a higher level of complexity is relegated to a primitive typing instead of its own dedicated class. A few examples of this are phone numbers being represented as a string or mass being represented as an integer. Phone numbers are not just strings of numbers; they have hyphens, area codes, and a specific length that they must be to qualify. When it comes to mass, it is very easy to misinterpret the units which can lead to miscalculations. In both of these cases, a specific class can guarantee type safety and clarity for the developer. This concept makes it easier to safely pass parameters and have a better understanding of the code itself. Using Fowlers methods, we can simply use "Replace Primitive with Object".
 
 For example:
 ```java 
-string phoneNumber;
+String phoneNumber;
 ``` 
 It is clear that there is nothing stopping us from passing any kind of string to phoneNumber
 
@@ -34,13 +35,14 @@ public class PhoneNumber {
 ```
 In doing so, we can be sure that any argument we pass for a parameter of type PhoneNumber is a valid phone number
 
-------------------
+
 Data Clumps:
 ------------------
+
 Introduction:
 A data clump is a group of three or four values that keep showing up together, as fields in several classes or as parameters in many function signatures, without ever being given a type of their own.  
 
-------------------
+
 How data clumps arise: 
   - Gradual growth
   - copy-paste reuse
@@ -48,7 +50,6 @@ How data clumps arise:
   - boundary data
   - prototyping
 
-------------------
 Why data clumps are a problem:
   - Long parameters lists
   - Duplicated logics
@@ -56,7 +57,6 @@ Why data clumps are a problem:
   - Inconsistent naming 
   - A missing abstraction
 
-------------------
 Preventing Data clumps:
   Use the rule of three 
   Model domain concepts early 
@@ -105,9 +105,9 @@ class NumberRange {
   constructor(min, max) {
     this._data = {min: min, max: max};
   }
-  get min() {return this._data.min;}
-  get max() {return this._data.max;}
-  contains(arg) {return (arg >= this.min && arg <= this.max);}
+  get min() { return this._data.min; }
+  get max() { return this._data.max; }
+  contains(arg) { return (arg >= this.min && arg <= this.max); }
 }
 
 function readingsOutsideRange(station, range) {
@@ -141,13 +141,16 @@ IEnumerable<Reading> ReadingsOutsideRange(Station station, NumberRange range) =>
 ```
 ------------------
 Similarities:
-  The clump and the fix are the same as in the other two languages: group the values, then move the logic into the new type.
-  The main benefit is still the behavior that moves into NumberRange, not just the shorter parameter list.
+
+- The clump and the fix are the same as in the other two languages: group the values, then move the logic into the new type.
+- The main benefit is still the behavior that moves into NumberRange, not just the shorter parameter list.
 
 ------------------
 Differences: 
   Static typing makes repeated double min, double max signatures easier to spot. The compiler still won’t catch me swapping them, though, because     both are double.
+
   A record struct creates the whole value type in one line and includes the value-based equality Fowler recommends adding.
+
   C# offers tuples like (double min, double max) as a shortcut. Like the other languages’ shortcuts, it doesn’t give the group a real type to hold    behavior.
 
 ------------------
@@ -180,6 +183,6 @@ Similarities:
 
 ------------------
 Differences: 
-  @dataclass(frozen=True) creates an immutable value object in a few lines, with no hand-written constructor or getters.
-  Python’s shortcuts are keyword arguments (low=0, high=10) or a tuple. Like the JavaScript shortcut, they make calls clearer but don’t give the group a home for behavior.
+  `@dataclass(frozen=True)` creates an immutable value object in a few lines, with no hand-written constructor or getters.
+  Python’s shortcuts are keyword arguments (`low=0`, `high=10`) or a tuple. Like the JavaScript shortcut, they make calls clearer but don’t give the group a home for behavior.
   
