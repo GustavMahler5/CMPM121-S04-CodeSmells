@@ -180,6 +180,74 @@ def readings_outside_range(station, rng: NumberRange):
   Python’s shortcuts are keyword arguments (`low=0`, `high=10`) or a tuple. Like the JavaScript shortcut, they make calls clearer but don’t give the group a home for behavior.
   
 
+## Duplicated Code:
 
+Duplicated Code is when there are two separate segments of code that are essentially duplicated but with only a few minor changes such as targeting a different variable. This becomes an issue if you want both segments to maintain the same code, meaning if you change one, you have to manually change the other.
 
-  
+# Preventing and Refactoring:
+
+Easiest way to prevent duplicated code is to plan out your core loops to turn into functions to call on later. However, as code develops and you find yourself using duplicated code, you can extract them into a function.
+
+# Smell:
+
+```JavaScript
+    function hurricane(num, image) {
+      for (var k = 1; k < 9; k++) {
+        var tile = num + k;
+        for (var i = 0; i < tileName.length; i++) {
+          if (tile == tileName[i]) {
+            appendItem(takenTiles, tileName);
+            insertItem(healthList, i, 0);
+            removeItem(healthList, i+1);
+            insertItem(typeList, i, "none");
+            removeItem(typeList, i+1);
+            setImageURL(tile, image);
+          }
+        }
+      }
+    }
+    function wildfire(num, image) {
+      for (var k = 0; k < rows.length; k++) {
+        var tile = rows[k] + num;
+        for (var i = 0; i < tileName.length; i++) {
+          if (tile == tileName[i]) {
+            insertItem(healthList, i, 0);
+            removeItem(healthList, i+1);
+            insertItem(typeList, i, "none");
+            removeItem(typeList, i+1);
+            setImageURL(tile, image);
+          }
+        }
+      }
+    }
+```
+
+# Refactored
+
+```JavaScript
+    function setImage(tile, image){
+      for (var i = 0; i < tileName.length; i++) {
+          if (tile == tileName[i]) {
+            insertItem(healthList, i, 0);
+            removeItem(healthList, i+1);
+            insertItem(typeList, i, "none");
+            removeItem(typeList, i+1);
+            setImageURL(tile, image);
+          }
+       }
+    }
+    
+    function hurricane(num, image) {
+      for (var k = 1; k < 9; k++) {
+        var tile = num + k;
+        setImage(tile, image)
+      }
+    }
+    
+    function wildfire(num, image) {
+      for (var k = 0; k < rows.length; k++) {
+        var tile = rows[k] + num;
+        setImage(tile, image)
+        }
+
+```
