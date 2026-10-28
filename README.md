@@ -1,8 +1,8 @@
 # CMPM121-S04-CodeSmells
 
-Group members: Roman Hage, Jack Farris
+Group members: Roman Hage, Jack Farris, Jason Holtman
 
-# Code Smells: Duplicated Code, Data Clumps 
+# Code Smells: Duplicated Code, Data Clumps, Primitive Obsession
 
 ## Primitive Obsession.  
 
