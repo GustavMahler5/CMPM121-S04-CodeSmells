@@ -8,13 +8,13 @@ Primitive Obsession.
 Primitive Obsession is a code smell where data that has a higher level of complexity is relegated to a primitive typing instead of its own dedicated class. A few examples of this are phone numbers being represented as a string or mass being represented as an integer. Phone numbers are not just strings of numbers; they have hyphens, area codes, and a specific length that they must be to qualify. When it comes to mass, it is very easy to misinterpret the units which can lead to miscalculations. In both of these cases, a specific class can guarantee type safety and clarity for the developer. This concept makes it easier to safely pass parameters and have a better understanding of the code itself. Using Fowlers methods, we can simply use "Replace Primitive with Object".
 
 For example:
-```
+```java 
 string phoneNumber;
-```
+``` 
 It is clear that there is nothing stopping us from passing any kind of string to phoneNumber
 
 We can instead create a class:  
-```
+```java
 // Java
 public class PhoneNumber {
 
@@ -66,7 +66,7 @@ Preventing Data clumps:
 
 ------------------
 Code examples (Fowler, pp 141 - 143): 
-```
+```typescript
 const station = { name: "ZB1",
                   readings: [
                     {temp: 47, time: "2016-11-10 09:10"},
@@ -100,7 +100,7 @@ Using Intro Parameters Object (p. 140), I’d start by creating a NumberRange cl
 
 ------------------
 Improved Code:
-``` typescript
+```typescript
 class NumberRange {
   constructor(min, max) {
     this._data = {min: min, max: max};
@@ -125,7 +125,7 @@ After the refactor, the function takes one range instead of two loose numbers, s
 ------------------
 C# comparison:
 
-``` C#
+```C#
 // Smell
 IEnumerable<Reading> ReadingsOutsideRange(Station station, double min, double max) =>
     station.Readings.Where(r => r.Temp < min || r.Temp > max);
@@ -153,13 +153,13 @@ Differences:
 ------------------
 Python comparison: 
 # Smell
-``` Python
+```Python
 def readings_outside_range(station, min_temp, max_temp):
     return [r for r in station["readings"]
             if r["temp"] < min_temp or r["temp"] > max_temp]
 ```
 # Refactored
-``` Python
+```Python
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
