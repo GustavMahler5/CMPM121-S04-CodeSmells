@@ -38,7 +38,7 @@ In doing so, we can be sure that any argument we pass for a parameter of type Ph
 Data Clumps:
 ------------------
 Introduction:
-A data clump is a group of three or four values that keep showing up together, as fields in several classes or as parameters in many function signatures, without ever being given a type of their own. Fowler puts it this way in Chapter 3 (p. 78): “Data items tend to be like children: They enjoy hanging around together.” A group that always travels together “really ought to find a home together.”
+A data clump is a group of three or four values that keep showing up together, as fields in several classes or as parameters in many function signatures, without ever being given a type of their own.  
 
 ------------------
 How data clumps arise: 
