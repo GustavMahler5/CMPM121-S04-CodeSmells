@@ -22,7 +22,7 @@ public class PhoneNumber {
     private String phoneNumber;
 
     public PhoneNumber(String number) {
-        if (number == null || number.length() != 12 || number.charAt(3) != '-' || number.charAt(7) != '-') {
+        if (!isValid()) {
             throw new IllegalArgumentException("Phone number must be in XXX-XXX-XXXX format.");
         }
         phoneNumber = number;
@@ -30,6 +30,10 @@ public class PhoneNumber {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    private Boolean isValid() {
+        return (number != null && number.length() == 12 && number.charAt(3) == '-' && number.charAt(7) == '-');
     }
 }
 ```
