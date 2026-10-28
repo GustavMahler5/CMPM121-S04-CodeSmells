@@ -66,7 +66,7 @@ Preventing Data clumps:
 
 ------------------
 Code examples (Fowler, pp 141 - 143): 
-
+```
 const station = { name: "ZB1",
                   readings: [
                     {temp: 47, time: "2016-11-10 09:10"},
@@ -86,7 +86,7 @@ function readingsOutsideRange(station, min, max) {
 alerts = readingsOutsideRange(station,
                               operatingPlan.temperatureFloor,
                               operatingPlan.temperatureCeiling);
-
+```
 ------------------
 Why it smells/Whats wrong with it?:
   - min and max are clumped. Neither means anything alone, and they're always passed as a pair. If you deleted one, the other would make no sense, so they fail Fowler's deletion test found in Ch 3. 
@@ -99,7 +99,8 @@ Refactoring/What to improve
 Using Intro Parameters Object (p. 140), I’d start by creating a NumberRange class to hold the clump. I’d make it a class rather than a plain object so I have a place to put behavior later, and I’d leave out setters so it stays immutable, which is what Fowler recommends. Then I’d swap the new object into the function and remove the old min and max parameters one at a time, testing after each change. Last, I’d move the range check itself into the class as a contains method. Fowler says this last part is where the real value is: “replacing a clump of parameters with a real object is just the setup for the really good stuff” (p. 143)
 
 ------------------
-Improved Code: 
+Improved Code:
+``` typescript
 class NumberRange {
   constructor(min, max) {
     this._data = {min: min, max: max};
@@ -117,12 +118,14 @@ function readingsOutsideRange(station, range) {
 // caller
 const range = new NumberRange(operatingPlan.temperatureFloor, operatingPlan.temperatureCeiling);
 alerts = readingsOutsideRange(station, range);
+```
 
 After the refactor, the function takes one range instead of two loose numbers, so I can’t swap min and max by accident. The naming mismatch between floor/ceiling and min/max is gone too. Now any time I need to check a range, I can reuse contains instead of writing the comparison again. I also like that this opens the door to more cleanup. Like Fowler suggests, I could keep an eye out for other min/max pairs in the code and replace them with NumberRange, starting with operatingPlan itself, which could store a single temperatureRange instead of separate floor and ceiling values.
 
 ------------------
-C# comparison: 
+C# comparison:
 
+``` C#
 // Smell
 IEnumerable<Reading> ReadingsOutsideRange(Station station, double min, double max) =>
     station.Readings.Where(r => r.Temp < min || r.Temp > max);
@@ -135,7 +138,7 @@ public readonly record struct NumberRange(double Min, double Max)
 
 IEnumerable<Reading> ReadingsOutsideRange(Station station, NumberRange range) =>
     station.Readings.Where(r => !range.Contains(r.Temp)); 
-
+```
 ------------------
 Similarities:
   The clump and the fix are the same as in the other two languages: group the values, then move the logic into the new type.
@@ -149,13 +152,14 @@ Differences:
 
 ------------------
 Python comparison: 
-
 # Smell
+``` Python
 def readings_outside_range(station, min_temp, max_temp):
     return [r for r in station["readings"]
             if r["temp"] < min_temp or r["temp"] > max_temp]
-
+```
 # Refactored
+``` Python
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
@@ -168,7 +172,7 @@ class NumberRange:
 
 def readings_outside_range(station, rng: NumberRange):
     return [r for r in station["readings"] if not rng.contains(r["temp"])]
-
+```
 ------------------
 Similarities:
   Like JavaScript, Python is dynamically typed, so the clump is just as easy to overlook.
@@ -177,5 +181,5 @@ Similarities:
 ------------------
 Differences: 
   @dataclass(frozen=True) creates an immutable value object in a few lines, with no hand-written constructor or getters.
-  Python’s shortcuts are keyword arguments (low=0, high=10) or a tuple. Like the JavaScript shortcut, they make calls clearer but don’t give the      group a home for behavior.
+  Python’s shortcuts are keyword arguments (low=0, high=10) or a tuple. Like the JavaScript shortcut, they make calls clearer but don’t give the group a home for behavior.
   
