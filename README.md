@@ -83,8 +83,7 @@ The logic gets duped. Any other function that needs a range has to rewrite the <
 
 
 # Refactoring/What to improve 
-I’d start by creating a NumberRange class to hold the clump. I’d make it a class rather than a plain object so I have a place to put behavior later, and I’d leave out setters so it stays immutable, which is what Fowler recommends. Then I’d swap the new object into the function and remove the old min and max parameters one at a time, testing after each change. Last, I’d move the range check itself into the class as a contains method. Fowler says this last part is where the real value is: “replacing a clump of parameters with a real object is just the setup for the really good stuff” (p. 143)
-
+I’d start by creating a NumberRange class to hold the clump. I’d make it a class rather than a plain object so I have a place to put behavior later, and I’d leave out setters so it stays immutable, which is what Fowler recommends. Then I’d swap the new object into the function and remove the old min and max parameters one at a time, testing after each change. Last, I’d move the range check itself into the class as a contains method. 
 
 # Improved Code:
 ```typescript
